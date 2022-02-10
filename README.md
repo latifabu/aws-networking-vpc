@@ -17,6 +17,7 @@
 - 
 ### What is NACL
 -A network access control list (NACL) operates on a subnet level. Is an optional layer of security using firewalls for controlling traffic in and out of a subnet. The main use for NACLs is explicit deny which you can't do with Security Groups.
+![Screenshot 2022-02-10 133025](https://user-images.githubusercontent.com/98215575/153418064-6bc490b9-db64-4618-a56e-f3e63414fc3e.png)
 
 ###
 Creating a VPC
