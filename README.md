@@ -14,12 +14,11 @@
 ### What is route table
 - Sets rules that determine where network traffic is directed and allowed to go.
 - It tells the network to route traffic to if the destination isn't within the same subnet. Traffic can be routed to an interface or gateway.
-- 
+
 ### What is NACL
 -A network access control list (NACL) operates on a subnet level. Is an optional layer of security using firewalls for controlling traffic in and out of a subnet. The main use for NACLs is explicit deny which you can't do with Security Groups.
 
-###
-Creating a VPC
+### Creating a VPC
 
 - Select region -Ireland 
 - Create VPC- virtual private cloud
