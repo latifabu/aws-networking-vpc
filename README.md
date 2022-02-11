@@ -16,7 +16,7 @@
 - It tells the network to route traffic to if the destination isn't within the same subnet. Traffic can be routed to an interface or gateway.
 
 ### What is NACL
--A network access control list (NACL) operates on a subnet level. Is an optional layer of security using firewalls for controlling traffic in and out of a subnet. The main use for NACLs is explicit deny which you can't do with Security Groups.
+- A network access control list (NACL) operates on a subnet level. Is an optional layer of security using firewalls for controlling traffic in and out of a subnet. The main use for NACLs is explicit deny which you can't do with Security Groups.
 
 ### Creating a VPC
 
@@ -35,6 +35,38 @@ Step 5 create a secuity group in our public subnet to allow required ports/ traf
 - allow port 80
 - port 3000
 - https -ssl if needed
+- 
+### Step 1: Creating a VPC
+- Make sure you're in the appropriate region (Ireland)
+- On the AWS Dashboard search for `VPC` and select `create VPC`
+- Add an appropriate name such as `eng103a_name_vpc`
+- Add a IPv4 CDIR block we used `10.0.0.0/16`
 
+### Step 2: Create Internet Gateway
+- Select `Internet Gateways` on the dashboard then select `Create Internet Gateway`
+- Add an appropriate name tag(eng103a_name_IG) then select `Create Internet Gateway`
+- Once created, select actions and attach VPC
+- Now attach the VPC already made (without it nothing within our vpc will receive traffic )
+- Finally attach Internet Gateway
 
+### Step 3: Creating a subnet
+- Return to the AWS dashboard and select subnet
+- Then create a subnet
+- Create a public subnet (Will have access to the internet gateway through the VPC)
+- Create a private subnet (Can only be accessed by public subnet after given permissions )
+- Enter names with the previous naming convenvtion e.g. `eng103a_name_subnet_public` , for the private subnet end the name in `private`
+- Select the VPC previosuly created 
+- Select the availability zones needed (eu-west-1a)
+- Public CIDR block `10.0.5.0/24`
+- Private CIDR block `10.0.6.0.24` (adding 1 to the public CIDR's 3rd digit) 
+
+### Step 4 Creating a route table
+- Return to the VPC dashboard again and select create route table.
+- Select the VPC just created.
+- Enter an appropriate name e.g. `eng103a_name_RT_public`
+- Then select actions -> edit routes -> add route
+- Destination `0.0.0.0/0` can be accessed by anyone 
+- Target `Internet Gateway` then select the IG we previosuly created. Save changes
+- Select actions -> edit subnet associations -> select public subnet
+- Create a private route table named `eng103a_name_RT_private` (Do Not edit routes as this should have no public access )
 
