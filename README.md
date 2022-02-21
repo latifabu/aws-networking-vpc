@@ -74,3 +74,58 @@ Step 5 create a secuity group in our public subnet to allow required ports/ traf
 - Select actions -> edit subnet associations -> select public subnet
 - Create a private route table named `eng103a_name_RT_private` (Do Not edit routes as this should have no public access )
 
+Create a new EC2 instance
+
+- Go to EC2 and launch instance
+- Select your own network and public subnet
+- Under user data enter
+
+```
+#!/bin/bash
+
+sudo apt-get update -y
+sudo apt-get upgrade -y
+
+sudo apt-install nginx -y
+sudo systemctl restart nginx
+sudo systemctl enable nginx
+```
+
+Rest of the steps are the same as before
+Wait for EC2 to initialise
+Test it by using the public IP address
+
+### Connecting our DB to app -
+- Using the private subnet created above
+- Select your VPC
+Enter your CIDR `10.0.6.0/24` This is different to your subnet for public.
+- Use private route table creates above
+- We don't need to add ports for this as we don't want to allow internet access as it is private
+- Launch VPC DB
+
+Now  start a new DB instance using our DB AMI
+- When creating this it will be same steps as always but we will change few details
+Use the VPC that was created earlier
+- This will automatically choose our subnet but we need to change it to private subnet
+- Disable the `public IP`
+- Important step: Now when we get onto security we need to add a new rule
+- Custom TCP Rule > Port Range : 27017 > Source > `10.0.5.0/24`
+This will allow the publci subnet to access DB.
+- Now carry on and add any tags necessary
+- Now enter this under user data at the bottom
+
+```
+#!/bin/bash
+sudo apt update -y && sudo apt upgrade -y
+sudo su ubuntu
+echo "export DB_HOST='mongodb://10.0.6.98:27017/posts'" >> /home/ubuntu/.bashrc
+source /home/ubuntu/.bashrc
+export DB_HOST='mongodb://10.0.6.98:27017/posts'
+cd /home/ubuntu/app && screen node seeds/seed.js
+cd /home/ubuntu/app && screen -d -m npm start 
+```
+- From the code above, we obtained the IP address from our running DB instance. This is the private IPv4 address.
+- Add security tags as necessary.
+- With both instances running we can see if `app` and `/posts` works and the publci IP of the app instance.
+
+
